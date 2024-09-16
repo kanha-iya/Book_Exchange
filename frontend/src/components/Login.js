@@ -12,7 +12,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://book-exchange-backend.vercel.app/api/auth/login', { email, password });
+      const response = await axios.post('https://backend-flame-one-87.vercel.app/api/auth/login', { email, password });
       localStorage.setItem('token', response.data.token);
       window.location.href = '/mybooks';
     } catch (error) {

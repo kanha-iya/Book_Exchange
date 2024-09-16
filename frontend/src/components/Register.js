@@ -12,7 +12,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://book-exchange-backend.vercel.app/api/auth/register', { username, email, password });
+      await axios.post('https://backend-flame-one-87.vercel.app/api/auth/register', { username, email, password });
       setSuccess('Registration successful! You can now log in.');
       setError('');
     } catch (error) {

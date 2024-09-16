@@ -142,7 +142,42 @@ exports.requestExchange = async (req, res) => {
 
 // backend/controllers/exchangeController.js
 
-// Approve or Reject an Exchange Request
+// // Approve or Reject an Exchange Request
+// exports.updateExchangeRequest = async (req, res) => {
+//   try {
+//     const { requestId, status } = req.body; // status can be 'approved' or 'rejected'
+//     const userId = req.user.id;
+
+//     // Find the exchange request by ID
+//     const request = await ExchangeRequest.findById(requestId).populate('book');
+
+//     if (!request) {
+//       return res.status(404).json({ success: false, message: 'Request not found' });
+//     }
+
+//     // Check if the current user is the owner of the book
+//     if (request.receiver.toString() !== userId) {
+//       return res.status(403).json({ success: false, message: 'You are not authorized to update this request' });
+//     }
+
+//     if (status === 'approved') {
+//       // Update the book owner to the request sender
+//       request.book.user = request.sender; 
+//       await request.book.save();
+      
+//     }
+
+//     // Update the request status
+//     request.status = status;
+//     await request.save();
+
+//     res.status(200).json({ success: true, data: request });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// Approve or Reject an Exchange Request and delete it after the action
 exports.updateExchangeRequest = async (req, res) => {
   try {
     const { requestId, status } = req.body; // status can be 'approved' or 'rejected'
@@ -170,12 +205,14 @@ exports.updateExchangeRequest = async (req, res) => {
     request.status = status;
     await request.save();
 
-    res.status(200).json({ success: true, data: request });
+    // Delete the request after approval or rejection
+    await ExchangeRequest.findByIdAndDelete(requestId);
+
+    res.status(200).json({ success: true, message: `Request ${status} and deleted successfully` });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 exports.getRequestsForMyBooks = async (req, res) => {
   try {

@@ -11,7 +11,7 @@ function ManageRequests() {
     const fetchRequests = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://book-exchange-backend.vercel.app/api/books/get-requests', {
+        const response = await axios.get('https://backend-flame-one-87.vercel.app/api/books/get-requests', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -26,8 +26,7 @@ function ManageRequests() {
   const handleRequestAction = async (requestId, action) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post(
-        'https://book-exchange-backend.vercel.app/api/books/manage-requests',
+      await axios.post('https://backend-flame-one-87.vercel.app/api/books/manage-requests',
         { requestId, status: action },
         {
           headers: { Authorization: `Bearer ${token}` },

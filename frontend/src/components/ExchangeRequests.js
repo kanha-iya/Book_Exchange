@@ -11,7 +11,7 @@ function ExchangeRequest() {
     const fetchAvailableBooks = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://book-exchange-backend.vercel.app/api/books/available-books', {
+        const response = await axios.get('https://backend-flame-one-87.vercel.app/api/books/available-books', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -27,7 +27,7 @@ function ExchangeRequest() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'https://book-exchange-backend.vercel.app/api/books/request-exchange',
+        'https://backend-flame-one-87.vercel.app/api/books/request-exchange',
         { requestedBookId: bookId },
         {
           headers: { Authorization: `Bearer ${token}` },
