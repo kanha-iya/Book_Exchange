@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import url from './BackendUrl';
+import { Link } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -63,6 +64,7 @@ function Login() {
           <button type="submit" className="btn btn-primary btn-block" disabled={isLoading}>
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
+          <div> New User ?  <Link className="btn btn-outline-primary" to="/register">Register</Link></div>
         </form>
       </div>
     </div>

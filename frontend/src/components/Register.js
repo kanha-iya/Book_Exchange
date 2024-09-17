@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import url from './BackendUrl';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -86,6 +87,7 @@ function Register() {
         >
           {isLoading ? 'Registering...' : 'Register'}
         </button>
+        <div> Already have an account ?  <Link className="btn btn-outline-primary" to="/">Login</Link></div>
       </form>
     </div>
   );
