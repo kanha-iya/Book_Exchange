@@ -1,47 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import url from './BackendUrl';
 
 function BookList() {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const token = localStorage.getItem('token'); // Get the token from local storage
-        const response = await axios.get(url +'api/books', {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${url}api/books`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            Authorization: `Bearer ${token}`,
           },
         });
 
         if (response.data.success) {
-          setBooks(response.data.data); // Update state with the books owned by the user
+          setBooks(response.data.data);
         } else {
           setError('Failed to fetch books');
         }
-      } catch (error) {
-        setError('Failed to fetch books');
+      } catch (err) {
+        setError(err.response?.data?.message || 'An error occurred while fetching books');
+      } finally {
+        setIsLoading(false);
       }
     };
+
     fetchBooks();
   }, []);
 
   return (
-    <div>
-      <h3>My Book List</h3>
+    <div className="container mt-4">
+      <h3 className="mb-4 text-center">My Book List</h3>
+
+      {/* Error Message */}
       {error && <div className="alert alert-danger">{error}</div>}
-      {books.length === 0 ? (
-        <p>No books listed for exchange.</p>
+
+      {/* Loading Spinner */}
+      {isLoading ? (
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : books.length === 0 ? (
+        <p className="text-muted text-center">You have no books listed for exchange.</p>
       ) : (
-        <ul className="list-group">
+        <div className="row">
           {books.map((book) => (
-            <li key={book._id} className="list-group-item">
-              {book.title} by {book.author} - {book.genre}
-            </li>
+            <div key={book._id} className="col-md-4 mb-4">
+              <div
+                className="card h-100 shadow-lg"
+                style={{
+                  borderRadius: '10px',
+                  border: '1px solid #007bff',
+                  transition: 'transform 0.3s ease',
+                }}
+              >
+                <div className="card-body">
+                  <h5 className="card-title text-primary">{book.title}</h5>
+                  <p className="card-text">
+                    <strong>Author:</strong> {book.author} <br />
+                    <strong>Genre:</strong> {book.genre}
+                  </p>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

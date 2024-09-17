@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import url from './BackendUrl';
 
 function BookMatch() {
   const [matches, setMatches] = useState([]);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -12,7 +14,7 @@ function BookMatch() {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId'); // Ensure the user ID is correctly stored
 
-        const response = await axios.get(url +'api/books/matches', {
+        const response = await axios.get(`${url}api/books/matches`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -22,27 +24,56 @@ function BookMatch() {
         );
 
         setMatches(filteredMatches);
-      } catch (error) {
-        setError('Failed to fetch matches');
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to fetch matches');
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchMatches();
   }, []);
 
   return (
-    <div>
-      <h3>Book Matches</h3>
+    <div className="container mt-4">
+      <h3 className="mb-4 text-center">Book Matches</h3>
+
+      {/* Error Message */}
       {error && <div className="alert alert-danger">{error}</div>}
-      {matches.length === 0 ? (
-        <p>No matches found.</p>
+
+      {/* Loading Spinner */}
+      {isLoading ? (
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : matches.length === 0 ? (
+        <p className="text-muted text-center">No matches found.</p>
       ) : (
-        <ul className="list-group">
+        <div className="row">
           {matches.map((match, index) => (
-            <li key={`${match._id}-${index}`} className="list-group-item">
-              {match.bookRequested.title} by {match.bookRequested.author} - Requested by {match.sender.username}
-            </li>
+            <div key={`${match._id}-${index}`} className="col-md-6 mb-4">
+              <div
+                className="card h-100 shadow-lg"
+                style={{
+                  borderRadius: '10px',
+                  border: '1px solid #28a745',
+                  transition: 'transform 0.3s ease',
+                }}
+              >
+                <div className="card-body">
+                  <h5 className="card-title text-success">
+                    {match.bookRequested.title}
+                  </h5>
+                  <p className="card-text">
+                    <strong>Author:</strong> {match.bookRequested.author} <br />
+                    <strong>Requested By:</strong> {match.sender.username}
+                  </p>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

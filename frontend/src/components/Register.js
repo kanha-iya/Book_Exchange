@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import url from './BackendUrl';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -9,37 +10,82 @@ function Register() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    setSuccess('');
+    
     try {
-      await axios.post(url +'api/auth/register', { username, email, password });
+      await axios.post(`${url}api/auth/register`, { username, email, password });
       setSuccess('Registration successful! You can now log in.');
-      setError('');
-    } catch (error) {
-      setError(error.response.data.message);
+    } catch (err) {
+      setError(err.response?.data?.message || 'An error occurred during registration. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="container">
-      <h2>Register</h2>
+    <div className="container mt-5" style={{ maxWidth: '500px' }}>
+      <h2 className="text-center">Create an Account</h2>
+
+      {/* Error Alert */}
       {error && <div className="alert alert-danger">{error}</div>}
+
+      {/* Success Alert */}
       {success && <div className="alert alert-success">{success}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label>Username</label>
-          <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} required />
+
+      <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+        <div className="form-group mb-3">
+          <label htmlFor="username">Username</label>
+          <input 
+            type="text" 
+            id="username" 
+            className="form-control" 
+            value={username} 
+            onChange={(e) => setUsername(e.target.value)} 
+            required 
+            aria-describedby="usernameHelp"
+          />
+          <div className="invalid-feedback">Username is required</div>
         </div>
-        <div className="mb-3">
-          <label>Email</label>
-          <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
+
+        <div className="form-group mb-3">
+          <label htmlFor="email">Email address</label>
+          <input 
+            type="email" 
+            id="email" 
+            className="form-control" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+          />
+          <div className="invalid-feedback">Please provide a valid email.</div>
         </div>
-        <div className="mb-3">
-          <label>Password</label>
-          <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
+
+        <div className="form-group mb-3">
+          <label htmlFor="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            className="form-control" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
+          />
+          <div className="invalid-feedback">Password is required.</div>
         </div>
-        <button type="submit" className="btn btn-primary">Register</button>
+
+        <button 
+          type="submit" 
+          className="btn btn-primary btn-block" 
+          disabled={isLoading}
+        >
+          {isLoading ? 'Registering...' : 'Register'}
+        </button>
       </form>
     </div>
   );
