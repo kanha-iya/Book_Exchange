@@ -1,3 +1,4 @@
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
@@ -8,7 +9,8 @@ import BookList from './components/BookList';
 import BookMatch from './components/BookMatch';
 import ExchangeRequests from './components/ExchangeRequests';
 import ManageRequests from './components/ManageRequests';
-import './App.css'; // Import the CSS file for background styles
+import Home from './components/Home'; // Import the Home component
+import './App.css';
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
             <Route path="/matches" element={<BookMatch />} />
             <Route path="/exchange-request" element={<ExchangeRequests />} />
             <Route path="/manage-requests" element={<ManageRequests />} />
+            <Route path="/home" element={<Home />} /> {/* Add the Home route */}
           </Routes>
         </div>
       </div>
