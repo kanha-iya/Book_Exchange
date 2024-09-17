@@ -217,10 +217,11 @@ exports.updateExchangeRequest = async (req, res) => {
 exports.getRequestsForMyBooks = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(userId);
+    // console.log(1);
+    // console.log(userId);
     // Find all books owned by the user
     const userBooks = await Book.find({ user: userId });
-    console.log(userBooks);
+    // console.log(userBooks);
     if (!userBooks.length) {
       return res.status(200).json({ success: true, data: [] }); // No books owned by the user
     }
@@ -232,7 +233,7 @@ exports.getRequestsForMyBooks = async (req, res) => {
       .populate('book') // Populates the book details
       .populate('sender', 'username'); // Populates the sender's username
 
-    console.log(requests);
+    // console.log(requests);
     res.status(200).json({ success: true, data: requests });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

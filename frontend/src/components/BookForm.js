@@ -1,6 +1,7 @@
 // src/components/BookForm.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import url from './BackendUrl';
 
 function BookForm({ onBookAdded }) {
   const [title, setTitle] = useState('');
@@ -14,7 +15,7 @@ function BookForm({ onBookAdded }) {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'https://backend-flame-one-87.vercel.app/api/books',
+        url +'api/books',
         { title, author, genre },
         { headers: { Authorization: `Bearer ${token}` } }
       );

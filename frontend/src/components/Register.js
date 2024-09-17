@@ -1,6 +1,7 @@
 // src/components/Register.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import url from './BackendUrl';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://backend-flame-one-87.vercel.app/api/auth/register', { username, email, password });
+      await axios.post(url +'api/auth/register', { username, email, password });
       setSuccess('Registration successful! You can now log in.');
       setError('');
     } catch (error) {

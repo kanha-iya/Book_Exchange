@@ -1,6 +1,7 @@
 // src/components/ExchangeRequest.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import url from './BackendUrl';
 
 function ExchangeRequest() {
   const [books, setBooks] = useState([]);
@@ -11,7 +12,7 @@ function ExchangeRequest() {
     const fetchAvailableBooks = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-flame-one-87.vercel.app/api/books/available-books', {
+        const response = await axios.get(url +'api/books/available-books', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -27,7 +28,7 @@ function ExchangeRequest() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'https://backend-flame-one-87.vercel.app/api/books/request-exchange',
+        url +'api/books/request-exchange',
         { requestedBookId: bookId },
         {
           headers: { Authorization: `Bearer ${token}` },
